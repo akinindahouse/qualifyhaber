@@ -1,1 +1,1043 @@
-hello world
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QualifyHaber — Reels Stüdyosu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0C0F;
+    --panel:#14171C;
+    --panel-2:#191D24;
+    --field:#0E1116;
+    --border:#262B33;
+    --border-soft:#1D2128;
+    --text:#F4F5F7;
+    --muted:#888F9B;
+    --muted-2:#5C636E;
+    --accent:#FF3B30;
+    --accent-dim:#7A1F1A;
+    --accent-2:#FFB020;
+    --good:#2BD17E;
+    --mono:'Space Mono', monospace;
+    --display:'Archivo Black', sans-serif;
+    --body:'Inter', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:var(--body);}
+  body{min-height:100vh;}
+
+  ::selection{background:var(--accent);color:#fff;}
+  input,select,textarea,button{font-family:var(--body);}
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 28px;border-bottom:1px solid var(--border-soft);
+    background:linear-gradient(180deg,#0D0F13,#0A0C0F);
+  }
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand-mark{
+    width:34px;height:34px;border-radius:8px;background:var(--accent);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--display);font-size:17px;color:#fff;flex:none;
+  }
+  .brand-text h1{font-size:15px;margin:0;font-weight:700;letter-spacing:.2px;}
+  .brand-text p{
+    margin:2px 0 0;font-family:var(--mono);font-size:10px;letter-spacing:1.6px;
+    color:var(--muted-2);text-transform:uppercase;
+  }
+  .topbar-tag{
+    font-family:var(--mono);font-size:11px;color:var(--muted);
+    border:1px solid var(--border);padding:6px 12px;border-radius:20px;
+    letter-spacing:.5px;
+  }
+  .topbar-tag b{color:var(--accent-2);font-weight:700;}
+
+  /* ---------- workspace ---------- */
+  .workspace{
+    display:grid;grid-template-columns:380px 1fr;gap:0;
+    min-height:calc(100vh - 71px);
+  }
+  @media (max-width: 920px){
+    .workspace{grid-template-columns:1fr;}
+  }
+
+  /* ---------- controls ---------- */
+  .controls{
+    border-right:1px solid var(--border-soft);
+    background:var(--panel);
+    padding:22px 22px 60px;
+    overflow-y:auto;
+    max-height:calc(100vh - 71px);
+  }
+  .section{margin-bottom:28px;}
+  .section-head{
+    display:flex;align-items:center;gap:8px;margin-bottom:14px;
+  }
+  .section-num{
+    font-family:var(--mono);font-size:11px;color:var(--bg);
+    background:var(--accent-2);width:20px;height:20px;border-radius:5px;
+    display:flex;align-items:center;justify-content:center;font-weight:700;flex:none;
+  }
+  .section-head h2{font-size:13px;margin:0;font-weight:700;letter-spacing:.3px;}
+
+  .field{margin-bottom:14px;}
+  .field label{
+    display:block;font-size:11px;color:var(--muted);margin-bottom:6px;
+    font-family:var(--mono);letter-spacing:.4px;text-transform:uppercase;
+  }
+  .field input[type=text], .field textarea{
+    width:100%;background:var(--field);border:1px solid var(--border);
+    color:var(--text);padding:9px 11px;border-radius:7px;font-size:13.5px;
+    outline:none;resize:none;
+  }
+  .field input[type=text]:focus, .field textarea:focus{border-color:var(--accent-2);}
+  .field textarea{min-height:56px;line-height:1.4;}
+  .hint{font-size:11px;color:var(--muted-2);margin-top:5px;line-height:1.5;}
+
+  .filebtn{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    background:var(--field);border:1px dashed var(--border);border-radius:7px;
+    padding:11px 12px;cursor:pointer;font-size:12.5px;color:var(--muted);
+  }
+  .filebtn:hover{border-color:var(--accent-2);color:var(--text);}
+  .filebtn input{display:none;}
+  .filebtn .fname{color:var(--good);font-family:var(--mono);font-size:11px;}
+
+  .toggle-row{display:flex;gap:8px;margin-bottom:14px;}
+  .toggle-row button{
+    flex:1;background:var(--field);border:1px solid var(--border);color:var(--muted);
+    padding:9px 10px;border-radius:7px;font-size:12.5px;cursor:pointer;font-weight:600;
+  }
+  .toggle-row button.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+  .swatches{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px;}
+  .swatch{
+    aspect-ratio:1;border-radius:8px;cursor:pointer;border:2px solid transparent;
+    position:relative;
+  }
+  .swatch.active{border-color:#fff;}
+  .swatch span{
+    position:absolute;bottom:-18px;left:0;right:0;text-align:center;
+    font-size:9px;color:var(--muted-2);font-family:var(--mono);
+  }
+
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .colorpick{display:flex;align-items:center;gap:8px;background:var(--field);border:1px solid var(--border);border-radius:7px;padding:6px 10px;}
+  .colorpick input[type=color]{width:26px;height:26px;border:none;background:none;padding:0;cursor:pointer;}
+  .colorpick span{font-family:var(--mono);font-size:11px;color:var(--muted);}
+
+  .slider-row{margin-bottom:14px;}
+  .slider-row .slabel{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px;}
+  .slider-row .slabel b{color:var(--accent-2);font-weight:700;}
+  input[type=range]{
+    -webkit-appearance:none;width:100%;height:3px;background:var(--border);
+    border-radius:2px;outline:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:14px;height:14px;border-radius:50%;
+    background:var(--accent-2);cursor:pointer;border:2px solid var(--bg);
+  }
+
+  select{
+    width:100%;background:var(--field);border:1px solid var(--border);color:var(--text);
+    padding:9px 11px;border-radius:7px;font-size:13px;outline:none;
+  }
+
+  .checkrow{display:flex;align-items:center;gap:9px;margin-bottom:10px;cursor:pointer;}
+  .checkrow input{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;}
+  .checkrow span{font-size:12.5px;color:var(--text);}
+
+  .export-btn{
+    width:100%;padding:13px;border-radius:8px;border:none;cursor:pointer;
+    font-size:13.5px;font-weight:700;margin-bottom:10px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+  .export-btn.primary{background:var(--accent);color:#fff;}
+  .export-btn.primary:hover{background:#FF5246;}
+  .export-btn.secondary{background:var(--field);border:1px solid var(--border);color:var(--text);}
+  .export-btn.secondary:hover{border-color:var(--accent-2);}
+  .export-btn:disabled{opacity:.45;cursor:not-allowed;}
+  .export-note{
+    font-size:11px;color:var(--muted-2);line-height:1.6;background:var(--field);
+    border:1px solid var(--border-soft);border-radius:7px;padding:10px 11px;margin-top:8px;
+  }
+  .export-note b{color:var(--muted);}
+
+  /* ---------- preview stage ---------- */
+  .preview-stage{
+    display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+    padding:40px 24px 60px;gap:16px;
+  }
+  .stage-readout{
+    font-family:var(--mono);font-size:11px;color:var(--muted-2);
+    display:flex;align-items:center;gap:14px;letter-spacing:.4px;
+  }
+  .rec-dot{width:7px;height:7px;border-radius:50%;background:var(--muted-2);}
+  .rec-dot.live{background:var(--accent);animation:blink 1s infinite;}
+  @keyframes blink{50%{opacity:.25;}}
+
+  .frame-wrap{
+    position:relative;width:min(360px, 80vw);aspect-ratio:9/16;
+    background:#000;border-radius:22px;overflow:hidden;
+    box-shadow:0 0 0 1px var(--border-soft), 0 30px 70px rgba(0,0,0,.55);
+  }
+  .frame-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#050608;z-index:1;}
+  .frame-media.kenburns-anim{animation:kbzoom 9s ease-in-out infinite alternate;}
+  @keyframes kbzoom{from{transform:scale(1);}to{transform:scale(1.08);}}
+  .frame-overlay{position:absolute;inset:0;mix-blend-mode:normal;pointer-events:none;z-index:3;}
+
+  .frame-brand{
+    position:absolute;left:6%;right:18%;display:flex;align-items:center;gap:8px;z-index:4;
+  }
+  .frame-brand img{height:34px;max-width:100%;object-fit:contain;display:block;}
+  .frame-brand .wordmark{
+    font-family:var(--display);font-size:19px;line-height:1;letter-spacing:.2px;
+    display:flex;gap:0;text-shadow:0 2px 10px rgba(0,0,0,.5);
+  }
+  .frame-brand .wordmark .w1{color:#fff;}
+  .frame-brand .wordmark .w2{color:var(--accent);}
+
+  .frame-textblock{position:absolute;left:6%;right:18%;display:flex;flex-direction:column;gap:10px;z-index:4;}
+  .frame-tag{
+    align-self:flex-start;font-family:var(--mono);font-size:10.5px;font-weight:700;
+    letter-spacing:1.4px;text-transform:uppercase;color:#0A0C0F;background:var(--accent-2);
+    padding:5px 11px;border-radius:4px;
+  }
+  .frame-title{
+    font-family:var(--display);color:#fff;font-size:30px;line-height:1.12;
+    text-shadow:0 3px 16px rgba(0,0,0,.6);word-break:keep-all;
+  }
+
+  .safezone{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .2s;z-index:5;}
+  .safezone.show{opacity:1;}
+  .sz-band{position:absolute;left:0;right:0;border-color:rgba(255,176,32,.55);}
+  .sz-band.top{top:0;height:11.5%;border-bottom:1px dashed rgba(255,176,32,.55);}
+  .sz-band.bottom{bottom:0;height:17%;border-top:1px dashed rgba(255,176,32,.55);}
+  .sz-side{position:absolute;top:11.5%;bottom:17%;right:0;width:13%;border-left:1px dashed rgba(255,176,32,.4);}
+  .sz-label{
+    position:absolute;font-family:var(--mono);font-size:8px;color:var(--accent-2);
+    letter-spacing:.5px;text-transform:uppercase;background:rgba(10,12,15,.7);
+    padding:2px 5px;border-radius:3px;
+  }
+
+  .corner{position:absolute;width:22px;height:22px;border-color:rgba(255,255,255,.55);z-index:6;}
+  .corner.tl{top:10px;left:10px;border-top:2px solid;border-left:2px solid;border-radius:4px 0 0 0;}
+  .corner.tr{top:10px;right:10px;border-top:2px solid;border-right:2px solid;border-radius:0 4px 0 0;}
+  .corner.bl{bottom:10px;left:10px;border-bottom:2px solid;border-left:2px solid;border-radius:0 0 0 4px;}
+  .corner.br{bottom:10px;right:10px;border-bottom:2px solid;border-right:2px solid;border-radius:0 0 4px 0;}
+
+  .empty-frame{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    flex-direction:column;gap:10px;color:var(--muted-2);text-align:center;padding:0 30px;z-index:2;
+  }
+  .empty-frame svg{opacity:.4;}
+  .empty-frame p{font-size:11.5px;line-height:1.5;margin:0;}
+
+  .stage-caption{
+    font-family:var(--mono);font-size:11px;color:var(--muted-2);text-align:center;max-width:340px;line-height:1.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-mark">Q</div>
+    <div class="brand-text">
+      <h1>QualifyHaber</h1>
+      <p>Reels Şablon Stüdyosu</p>
+    </div>
+  </div>
+  <div class="topbar-tag">9:16 · <b>Instagram Safe Zone</b> uyumlu</div>
+</div>
+
+<div class="workspace">
+
+  <aside class="controls">
+
+    <div class="section">
+      <div class="section-head"><div class="section-num">1</div><h2>Kaynak</h2></div>
+
+      <div class="toggle-row">
+        <button class="active" id="sourceModeVideo">Video</button>
+        <button id="sourceModePhoto">Fotoğraf</button>
+      </div>
+
+      <div id="videoSourceFields">
+        <div class="field">
+          <label>Arka plan videosu</label>
+          <label class="filebtn">
+            <span id="videoFileLabel">Video seç (mp4, mov…)</span>
+            <span class="fname" id="videoFileName"></span>
+            <input type="file" id="videoInput" accept="video/*">
+          </label>
+          <p class="hint">Video, kareyi 9:16 oranında otomatik kırpıp kaplar.</p>
+        </div>
+        <div class="field" id="clearVideoWrap" style="display:none;">
+          <button class="export-btn secondary" id="clearVideoBtn" style="margin:0;">Videoyu kaldır</button>
+        </div>
+      </div>
+
+      <div id="photoSourceFields" style="display:none;">
+        <div class="field">
+          <label>Haber fotoğrafı</label>
+          <label class="filebtn">
+            <span id="photoFileLabel">Fotoğraf seç (jpg, png…)</span>
+            <span class="fname" id="photoFileName"></span>
+            <input type="file" id="photoInput" accept="image/*">
+          </label>
+          <p class="hint">Videon yoksa bu fotoğrafla da gerçek bir Reels videosu üretilir; fotoğraf kareyi aynı şekilde kaplar ve güvenli alana göre otomatik hizalanır.</p>
+        </div>
+        <div class="field" id="clearPhotoWrap" style="display:none;">
+          <button class="export-btn secondary" id="clearPhotoBtn" style="margin:0;">Fotoğrafı kaldır</button>
+        </div>
+        <div class="slider-row">
+          <div class="slabel"><span>Reels süresi</span><b id="photoDurOut">6 sn</b></div>
+          <input type="range" id="photoDuration" min="3" max="15" value="6">
+        </div>
+        <label class="checkrow">
+          <input type="checkbox" id="kenBurnsToggle" checked>
+          <span>Hafif yakınlaşma efekti (sabit fotoğrafı daha canlı gösterir)</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><div class="section-num">2</div><h2>Marka</h2></div>
+
+      <label class="checkrow">
+        <input type="checkbox" id="brandVisibleToggle" checked>
+        <span>Marka öğesini göster</span>
+      </label>
+
+      <div id="brandFieldsWrap">
+        <div class="toggle-row">
+          <button class="active" id="brandModeText">Yazı</button>
+          <button id="brandModeLogo">Kendi logom</button>
+        </div>
+
+        <div id="brandTextFields">
+          <div class="field">
+            <label>Marka yazısı</label>
+            <input type="text" id="brandTextInput" maxlength="28" value="QualifyHaber">
+          </div>
+          <div class="field">
+            <label>Vurgulanacak kısım (opsiyonel)</label>
+            <input type="text" id="brandHighlightInput" maxlength="20" value="Haber">
+            <p class="hint">Yazı içinde bu kısmı bulup vurgu rengiyle gösteririz. Boş bırakırsan ya da yazıyla eşleşmezse tüm yazı beyaz görünür.</p>
+          </div>
+        </div>
+
+        <div class="field" id="logoFieldWrap" style="display:none;">
+          <label class="filebtn">
+            <span id="logoFileLabel">Logo yükle (png, şeffaf)</span>
+            <span class="fname" id="logoFileName"></span>
+            <input type="file" id="logoInput" accept="image/*">
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><div class="section-num">3</div><h2>İçerik</h2></div>
+      <div class="field">
+        <label>Konu / kategori etiketi</label>
+        <input type="text" id="tagInput" maxlength="22" value="GÜNDEM">
+      </div>
+      <div class="field">
+        <label>Haber başlığı</label>
+        <textarea id="titleInput" maxlength="110">Başlığı buraya yaz, otomatik satır kırılır</textarea>
+        <p class="hint" id="titleCount">0/110</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><div class="section-num">4</div><h2>Gradyan</h2></div>
+      <div class="swatches" id="presetSwatches"></div>
+      <div class="row2" style="margin-top:22px;">
+        <div class="colorpick"><input type="color" id="color1" value="#FF2D2D"><span>Renk 1</span></div>
+        <div class="colorpick"><input type="color" id="color2" value="#1A0000"><span>Renk 2</span></div>
+      </div>
+      <div class="field" style="margin-top:12px;">
+        <select id="gradStyle">
+          <option value="linear">Doğrusal geçiş</option>
+          <option value="radial">Dairesel geçiş</option>
+        </select>
+      </div>
+      <div class="slider-row" id="angleRow">
+        <div class="slabel"><span>Açı</span><b id="angleOut">160°</b></div>
+        <input type="range" id="angle" min="0" max="360" value="160">
+      </div>
+      <div class="slider-row">
+        <div class="slabel"><span>Gradyan yoğunluğu</span><b id="opacityOut">%55</b></div>
+        <input type="range" id="opacity" min="0" max="100" value="55">
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><div class="section-num">5</div><h2>Çerçeve</h2></div>
+      <label class="checkrow">
+        <input type="checkbox" id="safezoneToggle" checked>
+        <span>Instagram safe zone kılavuzunu göster (sadece önizleme, dışa aktarmaya dahil olmaz)</span>
+      </label>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><div class="section-num">6</div><h2>Dışa aktar</h2></div>
+      <div class="field">
+        <label>Çözünürlük</label>
+        <select id="exportRes">
+          <option value="1080x1920">1080×1920 — önerilen (Instagram standardı)</option>
+          <option value="720x1280">720×1280 — daha hızlı, daha küçük dosya</option>
+        </select>
+      </div>
+      <button class="export-btn secondary" id="exportPngBtn">Kapak görseli indir (PNG)</button>
+      <button class="export-btn primary" id="exportVideoBtn" disabled>Reels videosu indir (MP4)</button>
+      <div class="export-note">
+        <b>Not:</b> Çıktı doğrudan <b>.mp4</b> olarak iner, telefona aktarıp direkt Instagram'a yükleyebilirsin — ekstra dönüştürme gerekmez. İlk kullanımda tarayıcı, dönüştürme motorunu bir kerelik indirir (~25MB, birkaç saniye-yarım dakika sürebilir, internet gerekir); sonraki tüm aktarımlar tarayıcı önbelleğinden çalışıp çok daha hızlı olur. Safari kullanıyorsan bu adım atlanır, mp4 anında üretilir.
+      </div>
+    </div>
+
+  </aside>
+
+  <main class="preview-stage">
+    <div class="stage-readout">
+      <span class="rec-dot" id="recDot"></span>
+      <span id="recLabel">ÖNİZLEME</span>
+      <span id="timecode">00:00</span>
+    </div>
+
+    <div class="frame-wrap" id="frameWrap">
+      <video class="frame-media" id="frameVideo" muted loop playsinline></video>
+      <img class="frame-media" id="frameImage" style="display:none;">
+      <div class="empty-frame" id="emptyFrame">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="4" width="14" height="13" rx="2"/><path d="M16 9l5-3v12l-5-3"/></svg>
+        <p>Henüz video ya da fotoğraf yüklenmedi.<br>Şu an sade gradyan kapak görünüyor.</p>
+      </div>
+      <div class="frame-overlay" id="frameOverlay"></div>
+
+      <div class="frame-brand" id="frameBrand" style="top:8%;">
+        <div class="wordmark" id="brandWordmark"><span class="w1" id="wmPre">Qualify</span><span class="w2" id="wmHi">Haber</span><span class="w1" id="wmPost"></span></div>
+        <img id="brandLogoImg" style="display:none;">
+      </div>
+
+      <div class="frame-textblock" id="frameTextblock" style="bottom:18%;">
+        <div class="frame-tag" id="frameTag">GÜNDEM</div>
+        <div class="frame-title" id="frameTitle">Başlığı buraya yaz, otomatik satır kırılır</div>
+      </div>
+
+      <div class="safezone show" id="safezone">
+        <div class="sz-band top"><span class="sz-label" style="bottom:-16px;left:6%;">üst güvenli alan</span></div>
+        <div class="sz-band bottom"><span class="sz-label" style="top:-16px;left:6%;">alt güvenli alan · IG arayüzü</span></div>
+        <div class="sz-side"><span class="sz-label" style="writing-mode:vertical-rl;top:46%;right:4px;">ikon kolonu</span></div>
+      </div>
+
+      <div class="corner tl"></div>
+      <div class="corner tr"></div>
+      <div class="corner bl"></div>
+      <div class="corner br"></div>
+    </div>
+
+    <p class="stage-caption">Çerçeve, gerçek Reels oynatıcısının üst profil alanını, alt başlık/buton şeridini ve sağdaki beğeni-yorum ikon kolonunu temsil eder. Metinleri bu kılavuzların dışında tutarsan Instagram arayüzü hiçbir şeyi kapatmaz.</p>
+  </main>
+
+</div>
+
+<canvas id="exportCanvas" width="1080" height="1920" style="display:none;"></canvas>
+
+<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+<script>
+const PRESETS = [
+  {name:'Son Dakika', c1:'#FF2D2D', c2:'#1A0000', angle:160, style:'linear'},
+  {name:'Gece Bülteni', c1:'#5A3CFF', c2:'#0A0A1A', angle:160, style:'linear'},
+  {name:'Ekonomi', c1:'#FFB020', c2:'#1A1200', angle:160, style:'linear'},
+  {name:'Spor', c1:'#1FD15A', c2:'#001A08', angle:160, style:'linear'},
+  {name:'Sade Kontrast', c1:'#000000', c2:'#000000', angle:180, style:'radial'}
+];
+
+const state = {
+  sourceMode:'video',
+  hasVideo:false,
+  videoFile:null,
+  hasPhoto:false,
+  photoFile:null,
+  photoImg:null,
+  photoDurationSec:6,
+  kenBurns:true,
+  brandVisible:true,
+  brandMode:'text',
+  brandText:'QualifyHaber',
+  brandHighlight:'Haber',
+  logoImg:null,
+  tag:'GÜNDEM',
+  title:'Başlığı buraya yaz, otomatik satır kırılır',
+  c1:'#FF2D2D', c2:'#1A0000',
+  gradStyle:'linear', angle:160, opacity:55,
+  safezone:true,
+  recording:false,
+  exportRes:'1080x1920'
+};
+
+const $ = id => document.getElementById(id);
+const videoInput = $('videoInput');
+const frameVideo = $('frameVideo');
+const frameImage = $('frameImage');
+const photoInput = $('photoInput');
+const emptyFrame = $('emptyFrame');
+const clearVideoWrap = $('clearVideoWrap');
+const clearPhotoWrap = $('clearPhotoWrap');
+
+function exportReady(){
+  return (state.sourceMode==='video' && state.hasVideo) || (state.sourceMode==='photo' && state.hasPhoto);
+}
+
+function updateExportButtonState(){
+  $('exportVideoBtn').disabled = state.recording || !exportReady();
+}
+
+function updateSourceUI(){
+  const v = state.sourceMode==='video';
+  $('sourceModeVideo').classList.toggle('active', v);
+  $('sourceModePhoto').classList.toggle('active', !v);
+  $('videoSourceFields').style.display = v ? 'block' : 'none';
+  $('photoSourceFields').style.display = v ? 'none' : 'block';
+  frameVideo.style.display = (v && state.hasVideo) ? 'block' : 'none';
+  frameImage.style.display = (!v && state.hasPhoto) ? 'block' : 'none';
+  emptyFrame.style.display = ((v && !state.hasVideo) || (!v && !state.hasPhoto)) ? 'flex' : 'none';
+  if(v && state.hasVideo){ frameVideo.play().catch(()=>{}); }
+  if(!v){ frameVideo.pause(); }
+  updateExportButtonState();
+}
+
+$('sourceModeVideo').addEventListener('click', ()=>{ state.sourceMode='video'; updateSourceUI(); });
+$('sourceModePhoto').addEventListener('click', ()=>{ state.sourceMode='photo'; updateSourceUI(); });
+
+function hexToRgba(hex, a){
+  const h = hex.replace('#','');
+  const r = parseInt(h.substring(0,2),16), g = parseInt(h.substring(2,4),16), b = parseInt(h.substring(4,6),16);
+  return 'rgba('+r+','+g+','+b+','+a+')';
+}
+
+function buildPresetSwatches(){
+  const wrap = $('presetSwatches');
+  wrap.innerHTML='';
+  PRESETS.forEach((p,i)=>{
+    const el = document.createElement('div');
+    el.className='swatch'+(i===0?' active':'');
+    el.style.background = p.style==='radial'
+      ? 'radial-gradient(circle at 50% 50%,'+p.c1+','+p.c2+')'
+      : 'linear-gradient('+p.angle+'deg,'+p.c1+','+p.c2+')';
+    el.title = p.name;
+    el.addEventListener('click', ()=>{
+      document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('active'));
+      el.classList.add('active');
+      state.c1=p.c1; state.c2=p.c2; state.gradStyle=p.style; state.angle=p.angle;
+      $('color1').value=p.c1; $('color2').value=p.c2; $('gradStyle').value=p.style; $('angle').value=p.angle;
+      $('angleOut').textContent=p.angle+'°';
+      render();
+    });
+    wrap.appendChild(el);
+  });
+}
+buildPresetSwatches();
+
+function deselectSwatches(){ document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('active')); }
+
+videoInput.addEventListener('change', e=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  const url = URL.createObjectURL(f);
+  frameVideo.src = url;
+  frameVideo.play().catch(()=>{});
+  state.hasVideo = true;
+  state.videoFile = f;
+  $('videoFileName').textContent = f.name.length>18 ? f.name.slice(0,16)+'…' : f.name;
+  clearVideoWrap.style.display='block';
+  updateSourceUI();
+});
+
+$('clearVideoBtn').addEventListener('click', ()=>{
+  frameVideo.pause();
+  frameVideo.removeAttribute('src');
+  frameVideo.load();
+  state.hasVideo=false; state.videoFile=null;
+  $('videoFileName').textContent='';
+  clearVideoWrap.style.display='none';
+  videoInput.value='';
+  updateSourceUI();
+});
+
+function updatePhotoAnim(){
+  frameImage.classList.toggle('kenburns-anim', state.kenBurns && state.hasPhoto);
+}
+
+photoInput.addEventListener('change', e=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  const url = URL.createObjectURL(f);
+  const img = new Image();
+  img.onload = ()=>{ state.photoImg = img; };
+  img.src = url;
+  frameImage.src = url;
+  state.hasPhoto = true;
+  state.photoFile = f;
+  $('photoFileName').textContent = f.name.length>18 ? f.name.slice(0,16)+'…' : f.name;
+  clearPhotoWrap.style.display='block';
+  updatePhotoAnim();
+  updateSourceUI();
+});
+
+$('clearPhotoBtn').addEventListener('click', ()=>{
+  frameImage.removeAttribute('src');
+  state.hasPhoto=false; state.photoFile=null; state.photoImg=null;
+  $('photoFileName').textContent='';
+  clearPhotoWrap.style.display='none';
+  photoInput.value='';
+  updateSourceUI();
+});
+
+$('photoDuration').addEventListener('input', e=>{
+  state.photoDurationSec = +e.target.value;
+  $('photoDurOut').textContent = state.photoDurationSec+' sn';
+});
+
+$('kenBurnsToggle').addEventListener('change', e=>{
+  state.kenBurns = e.target.checked;
+  updatePhotoAnim();
+});
+
+$('brandVisibleToggle').addEventListener('change', e=>{
+  state.brandVisible = e.target.checked;
+  $('frameBrand').style.display = state.brandVisible ? 'flex' : 'none';
+  $('brandFieldsWrap').style.opacity = state.brandVisible ? '1' : '.4';
+  $('brandFieldsWrap').style.pointerEvents = state.brandVisible ? 'auto' : 'none';
+});
+
+$('brandModeText').addEventListener('click', ()=>{
+  state.brandMode='text';
+  $('brandModeText').classList.add('active');
+  $('brandModeLogo').classList.remove('active');
+  $('logoFieldWrap').style.display='none';
+  $('brandTextFields').style.display='block';
+  $('brandWordmark').style.display='flex';
+  $('brandLogoImg').style.display='none';
+});
+$('brandModeLogo').addEventListener('click', ()=>{
+  state.brandMode='logo';
+  $('brandModeLogo').classList.add('active');
+  $('brandModeText').classList.remove('active');
+  $('logoFieldWrap').style.display='block';
+  $('brandTextFields').style.display='none';
+  $('brandWordmark').style.display='none';
+  if(state.logoImg) $('brandLogoImg').style.display='block';
+});
+
+$('brandTextInput').addEventListener('input', e=>{
+  state.brandText = e.target.value || 'QualifyHaber';
+  updateWordmark();
+});
+$('brandHighlightInput').addEventListener('input', e=>{
+  state.brandHighlight = e.target.value;
+  updateWordmark();
+});
+
+$('logoInput').addEventListener('change', e=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  const url = URL.createObjectURL(f);
+  const img = new Image();
+  img.onload = ()=>{ state.logoImg = img; };
+  img.src = url;
+  $('brandLogoImg').src = url;
+  $('brandLogoImg').style.display='block';
+  $('logoFileName').textContent = f.name.length>16 ? f.name.slice(0,14)+'…' : f.name;
+});
+
+$('tagInput').addEventListener('input', e=>{ state.tag = e.target.value.toUpperCase() || 'GÜNDEM'; render(); });
+$('titleInput').addEventListener('input', e=>{
+  state.title = e.target.value;
+  $('titleCount').textContent = e.target.value.length+'/110';
+  render();
+});
+
+['color1','color2'].forEach(id=>{
+  $(id).addEventListener('input', ()=>{
+    deselectSwatches();
+    state.c1 = $('color1').value; state.c2 = $('color2').value;
+    render();
+  });
+});
+$('gradStyle').addEventListener('change', e=>{
+  state.gradStyle = e.target.value;
+  $('angleRow').style.display = state.gradStyle==='linear' ? 'block':'none';
+  deselectSwatches();
+  render();
+});
+$('angle').addEventListener('input', e=>{
+  state.angle = +e.target.value; $('angleOut').textContent = state.angle+'°';
+  deselectSwatches(); render();
+});
+$('opacity').addEventListener('input', e=>{
+  state.opacity = +e.target.value; $('opacityOut').textContent = '%'+state.opacity;
+  render();
+});
+$('safezoneToggle').addEventListener('change', e=>{
+  state.safezone = e.target.checked;
+  $('safezone').classList.toggle('show', state.safezone);
+});
+$('exportRes').addEventListener('change', e=>{ state.exportRes = e.target.value; });
+
+function splitBrand(){
+  const text = state.brandText || '';
+  const hi = state.brandHighlight || '';
+  if(hi && text.includes(hi)){
+    const idx = text.indexOf(hi);
+    return {pre:text.slice(0,idx), hi:hi, post:text.slice(idx+hi.length)};
+  }
+  return {pre:text, hi:'', post:''};
+}
+
+function updateWordmark(){
+  const parts = splitBrand();
+  $('wmPre').textContent = parts.pre;
+  $('wmHi').textContent = parts.hi;
+  $('wmPost').textContent = parts.post;
+}
+
+function render(){
+  $('frameOverlay').style.background = state.gradStyle==='radial'
+    ? 'radial-gradient(circle at 50% 50%, '+hexToRgba(state.c1,state.opacity/100)+', '+hexToRgba(state.c2,Math.min(1,state.opacity/100+0.25))+')'
+    : 'linear-gradient('+state.angle+'deg, '+hexToRgba(state.c1,state.opacity/100)+', '+hexToRgba(state.c2,Math.min(1,state.opacity/100+0.25))+')';
+  $('frameTag').textContent = state.tag;
+  $('frameTitle').textContent = state.title || 'Başlığı buraya yaz';
+  updateWordmark();
+}
+render();
+
+/* ---------- canvas export ---------- */
+const SAFE = { top:0.115, bottom:0.17, side:0.06, rightIcons:0.13 };
+const exportCanvas = $('exportCanvas');
+const ctx = exportCanvas.getContext('2d');
+const CW = exportCanvas.width, CH = exportCanvas.height;
+
+function drawCover(mediaEl, mw, mh, extraScale){
+  if(!mw||!mh) return;
+  const s = extraScale || 1;
+  const scale = Math.max(CW/mw, CH/mh) * s;
+  const dw = mw*scale, dh = mh*scale;
+  const dx = (CW-dw)/2, dy = (CH-dh)/2;
+  ctx.drawImage(mediaEl, dx, dy, dw, dh);
+}
+
+function angleCoords(angleDeg, w, h){
+  const rad = (angleDeg-90) * Math.PI/180;
+  const x = Math.cos(rad), y = Math.sin(rad);
+  const cx=w/2, cy=h/2, len = Math.sqrt(w*w+h*h)/2;
+  return {x1:cx-x*len, y1:cy-y*len, x2:cx+x*len, y2:cy+y*len};
+}
+
+function drawGradient(){
+  let grad;
+  const a1 = state.opacity/100, a2 = Math.min(1, state.opacity/100+0.25);
+  if(state.gradStyle==='radial'){
+    grad = ctx.createRadialGradient(CW/2,CH/2,0,CW/2,CH/2,Math.max(CW,CH)*0.75);
+  } else {
+    const c = angleCoords(state.angle, CW, CH);
+    grad = ctx.createLinearGradient(c.x1,c.y1,c.x2,c.y2);
+  }
+  grad.addColorStop(0, hexToRgba(state.c1,a1));
+  grad.addColorStop(1, hexToRgba(state.c2,a2));
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,CW,CH);
+}
+
+function wrapLines(text, font, maxWidth){
+  ctx.font = font;
+  const words = text.split(/\s+/).filter(Boolean);
+  const lines = [];
+  let cur = '';
+  for(const w of words){
+    const test = cur ? cur+' '+w : w;
+    if(ctx.measureText(test).width > maxWidth && cur){
+      lines.push(cur); cur = w;
+    } else cur = test;
+  }
+  if(cur) lines.push(cur);
+  return lines;
+}
+
+function drawBrand(){
+  if(!state.brandVisible) return;
+  const topY = CH*SAFE.top;
+  const leftX = CW*SAFE.side;
+  if(state.brandMode==='logo' && state.logoImg){
+    const maxH = 96, ratio = state.logoImg.naturalWidth/state.logoImg.naturalHeight;
+    const h = maxH, w = h*ratio;
+    ctx.drawImage(state.logoImg, leftX, topY, w, h);
+  } else {
+    const parts = splitBrand();
+    ctx.textBaseline = 'top';
+    ctx.font = "700 56px 'Archivo Black', sans-serif";
+    ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 18; ctx.shadowOffsetY = 4;
+    let x = leftX;
+    if(parts.pre){
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(parts.pre, x, topY);
+      x += ctx.measureText(parts.pre).width;
+    }
+    if(parts.hi){
+      ctx.fillStyle = '#FF3B30';
+      ctx.fillText(parts.hi, x, topY);
+      x += ctx.measureText(parts.hi).width;
+    }
+    if(parts.post){
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(parts.post, x, topY);
+    }
+    ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+  }
+}
+
+function drawTextBlock(){
+  const rightLimit = CW - CW*(SAFE.side + SAFE.rightIcons);
+  const leftX = CW*SAFE.side;
+  const maxWidth = rightLimit - leftX;
+  const bottomLimit = CH - CH*SAFE.bottom;
+
+  ctx.textBaseline = 'alphabetic';
+  const titleFont = "900 66px 'Archivo Black', sans-serif";
+  const lines = wrapLines(state.title || ' ', titleFont, maxWidth).slice(0,4);
+  const lineHeight = 76;
+  const tagH = 58;
+  const gap = 22;
+  const totalH = tagH + gap + lines.length*lineHeight;
+  let cursorY = bottomLimit - totalH;
+
+  ctx.font = "700 30px 'Space Mono', monospace";
+  const tagText = (state.tag||'GÜNDEM').toUpperCase();
+  const tagPadX = 26;
+  const tagW = ctx.measureText(tagText).width + tagPadX*2;
+  ctx.fillStyle = '#FFB020';
+  roundRect(leftX, cursorY, tagW, tagH-12, 6);
+  ctx.fill();
+  ctx.fillStyle = '#0A0C0F';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(tagText, leftX+tagPadX, cursorY + (tagH-12)/2 + 1);
+
+  let ty = cursorY + tagH + gap + lineHeight*0.78;
+  ctx.font = titleFont;
+  ctx.fillStyle = '#FFFFFF';
+  ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 22; ctx.shadowOffsetY = 4;
+  ctx.textBaseline = 'alphabetic';
+  for(const line of lines){
+    ctx.fillText(line, leftX, ty);
+    ty += lineHeight;
+  }
+  ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+}
+
+function roundRect(x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+
+function drawFrame(elapsedMs){
+  if(state.sourceMode==='video' && state.hasVideo && frameVideo.readyState >= 2){
+    drawCover(frameVideo, frameVideo.videoWidth, frameVideo.videoHeight, 1);
+  } else if(state.sourceMode==='photo' && state.hasPhoto && state.photoImg){
+    let scale = 1;
+    if(state.kenBurns && elapsedMs!=null){
+      const durMs = state.photoDurationSec*1000;
+      const r = Math.min(1, elapsedMs/durMs);
+      scale = 1 + r*0.08;
+    }
+    drawCover(state.photoImg, state.photoImg.naturalWidth, state.photoImg.naturalHeight, scale);
+  } else {
+    ctx.fillStyle = '#050608';
+    ctx.fillRect(0,0,CW,CH);
+  }
+  drawGradient();
+  drawBrand();
+  drawTextBlock();
+}
+
+function fmtTime(s){
+  const m = Math.floor(s/60).toString().padStart(2,'0');
+  const sec = Math.floor(s%60).toString().padStart(2,'0');
+  return m+':'+sec;
+}
+
+function downloadBlob(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url), 4000);
+}
+
+let ffmpegInstance = null;
+let ffmpegLoaded = false;
+async function getFFmpeg(onStage){
+  if(ffmpegInstance) return ffmpegInstance;
+  const { createFFmpeg } = FFmpeg;
+  ffmpegInstance = createFFmpeg({
+    log:false,
+    corePath:'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js'
+  });
+  if(onStage) onStage('Dönüştürme motoru hazırlanıyor (ilk seferde sürebilir)…');
+  await ffmpegInstance.load();
+  ffmpegLoaded = true;
+  return ffmpegInstance;
+}
+
+async function convertToMp4(webmBlob, w, h, onStage, onProgress){
+  const { fetchFile } = FFmpeg;
+  const ff = await getFFmpeg(onStage);
+  if(onStage) onStage('MP4\u2019e dönüştürülüyor…');
+  ff.setProgress(({ratio})=>{
+    if(onProgress) onProgress(Math.round(Math.min(1, Math.max(0, ratio||0))*100));
+  });
+  ff.FS('writeFile', 'input.webm', await fetchFile(webmBlob));
+  await ff.run(
+    '-i','input.webm',
+    '-vf','scale='+w+':'+h,
+    '-c:v','libx264','-preset','veryfast','-crf','20','-pix_fmt','yuv420p',
+    '-c:a','aac','-b:a','128k',
+    '-movflags','+faststart',
+    'output.mp4'
+  );
+  const data = ff.FS('readFile', 'output.mp4');
+  try{ ff.FS('unlink','input.webm'); ff.FS('unlink','output.mp4'); }catch(e){}
+  return new Blob([data.buffer], {type:'video/mp4'});
+}
+
+$('exportPngBtn').addEventListener('click', async ()=>{
+  await document.fonts.ready;
+  drawFrame(0);
+  exportCanvas.toBlob(blob=>{
+    downloadBlob(blob, 'qualifyhaber-kapak.png');
+  }, 'image/png');
+});
+
+let recTimer = null, recStart = 0;
+function setRecordingUI(on){
+  state.recording = on;
+  $('recDot').classList.toggle('live', on);
+  if(on){
+    $('recLabel').textContent = 'KAYDEDİLİYOR';
+    $('exportVideoBtn').textContent = 'Kaydediliyor…';
+  } else {
+    $('recLabel').textContent = 'ÖNİZLEME';
+    $('exportVideoBtn').textContent = 'Reels videosu indir (MP4)';
+  }
+  updateExportButtonState();
+  if(on){
+    recStart = performance.now();
+    recTimer = setInterval(()=>{
+      $('timecode').textContent = fmtTime((performance.now()-recStart)/1000);
+    }, 200);
+  } else {
+    clearInterval(recTimer);
+    $('timecode').textContent = '00:00';
+  }
+}
+
+function setStage(label){
+  $('recLabel').textContent = label;
+  $('exportVideoBtn').textContent = label;
+}
+function setStageProgress(pct){
+  $('timecode').textContent = pct+'%';
+}
+
+$('exportVideoBtn').addEventListener('click', async ()=>{
+  if(state.recording || !exportReady()) return;
+  await document.fonts.ready;
+
+  const stream = exportCanvas.captureStream(30);
+  if(state.sourceMode==='video'){
+    try{
+      const vStream = frameVideo.captureStream ? frameVideo.captureStream() : (frameVideo.mozCaptureStream ? frameVideo.mozCaptureStream() : null);
+      if(vStream){ vStream.getAudioTracks().forEach(t=>stream.addTrack(t)); }
+    }catch(err){}
+  }
+
+  let nativeMp4 = false;
+  try{ nativeMp4 = MediaRecorder.isTypeSupported('video/mp4'); }catch(e){}
+
+  const mimeType = nativeMp4 ? 'video/mp4' : (
+    MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus') ? 'video/webm;codecs=vp9,opus' :
+    (MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus') ? 'video/webm;codecs=vp8,opus' : 'video/webm')
+  );
+
+  let recorder;
+  try{
+    recorder = new MediaRecorder(stream, {mimeType, videoBitsPerSecond:8000000});
+  }catch(err){
+    alert('Tarayıcın video kaydını desteklemiyor. Güncel bir Chrome ile dene.');
+    return;
+  }
+  const chunks = [];
+  recorder.ondataavailable = e=>{ if(e.data && e.data.size) chunks.push(e.data); };
+  recorder.onstop = async ()=>{
+    const rawBlob = new Blob(chunks, {type: nativeMp4 ? 'video/mp4' : 'video/webm'});
+
+    if(nativeMp4){
+      downloadBlob(rawBlob, 'qualifyhaber-reels.mp4');
+      setRecordingUI(false);
+      return;
+    }
+
+    try{
+      const [w,h] = state.exportRes.split('x').map(Number);
+      const mp4Blob = await convertToMp4(rawBlob, w, h, setStage, setStageProgress);
+      downloadBlob(mp4Blob, 'qualifyhaber-reels.mp4');
+    }catch(err){
+      console.error(err);
+      alert('MP4\u2019e dönüştürme başarısız oldu, WEBM olarak indirildi. Telefonda CapCut veya VLC ile mp4\u2019e çevirebilirsin.');
+      downloadBlob(rawBlob, 'qualifyhaber-reels.webm');
+    } finally {
+      setRecordingUI(false);
+    }
+  };
+
+  let raf, recStartTs;
+  function loop(){
+    const elapsed = performance.now() - recStartTs;
+    drawFrame(elapsed);
+    raf = requestAnimationFrame(loop);
+  }
+
+  setRecordingUI(true);
+
+  let durMs;
+  if(state.sourceMode==='video'){
+    frameVideo.currentTime = 0;
+    try{ await frameVideo.play(); }catch(err){}
+    durMs = (frameVideo.duration && isFinite(frameVideo.duration)) ? frameVideo.duration*1000 : 8000;
+  } else {
+    durMs = state.photoDurationSec*1000;
+  }
+
+  recStartTs = performance.now();
+  recorder.start();
+  loop();
+
+  setTimeout(()=>{
+    cancelAnimationFrame(raf);
+    if(recorder.state !== 'inactive') recorder.stop();
+  }, durMs);
+});
+</script>
+</body>
+</html>
