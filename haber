@@ -305,7 +305,7 @@
         </div>
         <div class="slider-row">
           <div class="slabel"><span>Reels süresi</span><b id="photoDurOut">6 sn</b></div>
-          <input type="range" id="photoDuration" min="3" max="15" value="6">
+          <input type="range" id="photoDuration" min="3" max="30" value="6">
         </div>
         <label class="checkrow">
           <input type="checkbox" id="kenBurnsToggle" checked>
