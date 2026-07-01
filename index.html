@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QualifyHaber — Reels Stüdyosu</title>
+<title>QualifyHaber — Sosyal İçerik Stüdyosu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -182,8 +182,8 @@
   @keyframes blink{50%{opacity:.25;}}
 
   .frame-wrap{
-    position:relative;width:min(360px, 80vw);aspect-ratio:9/16;
-    background:#000;border-radius:22px;overflow:hidden;
+    position:relative;width:min(var(--frame-w, 360px), 80vw);aspect-ratio:var(--frame-aspect, 9/16);
+    background:#000;border-radius:22px;overflow:hidden;transition:width .2s ease, aspect-ratio .2s ease;
     box-shadow:0 0 0 1px var(--border-soft), 0 30px 70px rgba(0,0,0,.55);
   }
   .frame-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#050608;z-index:1;}
@@ -250,15 +250,24 @@
     <div class="brand-mark">Q</div>
     <div class="brand-text">
       <h1>QualifyHaber</h1>
-      <p>Reels Şablon Stüdyosu</p>
+      <p>Sosyal İçerik Stüdyosu</p>
     </div>
   </div>
-  <div class="topbar-tag">9:16 · <b>Instagram Safe Zone</b> uyumlu</div>
+  <div class="topbar-tag" id="topbarFormatTag">9:16 · <b>Instagram Safe Zone</b> uyumlu</div>
 </div>
 
 <div class="workspace">
 
   <aside class="controls">
+
+    <div class="section">
+      <div class="section-head"><div class="section-num">F</div><h2>Format</h2></div>
+      <div class="toggle-row">
+        <button class="active" id="formatReelsBtn">Reels 9:16</button>
+        <button id="formatPostBtn">Post 4:5</button>
+      </div>
+      <p class="hint" id="formatHint">Reels formatında sağ ikon kolonu ve alt Instagram arayüz güvenli alanı dikkate alınır.</p>
+    </div>
 
     <div class="section">
       <div class="section-head"><div class="section-num">1</div><h2>Kaynak</h2></div>
@@ -398,15 +407,12 @@
       <div class="section-head"><div class="section-num">6</div><h2>Dışa aktar</h2></div>
       <div class="field">
         <label>Çözünürlük</label>
-        <select id="exportRes">
-          <option value="1080x1920">1080×1920 — önerilen (Instagram standardı)</option>
-          <option value="720x1280">720×1280 — daha hızlı, daha küçük dosya</option>
-        </select>
+        <select id="exportRes"></select>
       </div>
       <button class="export-btn secondary" id="exportPngBtn">Kapak görseli indir (PNG)</button>
-      <button class="export-btn primary" id="exportVideoBtn" disabled>Reels videosu indir (MP4)</button>
+      <button class="export-btn primary" id="exportVideoBtn" disabled>Video indir (MP4)</button>
       <div class="export-note">
-        <b>Not:</b> Çıktı doğrudan <b>.mp4</b> olarak iner, telefona aktarıp direkt Instagram'a yükleyebilirsin — ekstra dönüştürme gerekmez. İlk kullanımda tarayıcı, dönüştürme motorunu bir kerelik indirir (~25MB, birkaç saniye-yarım dakika sürebilir, internet gerekir); sonraki tüm aktarımlar tarayıcı önbelleğinden çalışıp çok daha hızlı olur. Safari kullanıyorsan bu adım atlanır, mp4 anında üretilir.
+        <b>Not:</b> Çıktı seçili formata göre doğrudan <b>.mp4</b> olarak iner, telefona aktarıp direkt Instagram'a yükleyebilirsin — ekstra dönüştürme gerekmez. İlk kullanımda tarayıcı, dönüştürme motorunu bir kerelik indirir (~25MB, birkaç saniye-yarım dakika sürebilir, internet gerekir); sonraki tüm aktarımlar tarayıcı önbelleğinden çalışıp çok daha hızlı olur. Safari kullanıyorsan bu adım atlanır, mp4 anında üretilir.
       </div>
     </div>
 
@@ -450,7 +456,7 @@
       <div class="corner br"></div>
     </div>
 
-    <p class="stage-caption">Çerçeve, gerçek Reels oynatıcısının üst profil alanını, alt başlık/buton şeridini ve sağdaki beğeni-yorum ikon kolonunu temsil eder. Metinleri bu kılavuzların dışında tutarsan Instagram arayüzü hiçbir şeyi kapatmaz.</p>
+    <p class="stage-caption" id="stageCaption">Çerçeve, gerçek Reels oynatıcısının üst profil alanını, alt başlık/buton şeridini ve sağdaki beğeni-yorum ikon kolonunu temsil eder. Metinleri bu kılavuzların dışında tutarsan Instagram arayüzü hiçbir şeyi kapatmaz.</p>
   </main>
 
 </div>
@@ -468,6 +474,7 @@ const PRESETS = [
 ];
 
 const state = {
+  format:'reels',
   sourceMode:'video',
   hasVideo:false,
   videoFile:null,
@@ -491,6 +498,24 @@ const state = {
 };
 
 const $ = id => document.getElementById(id);
+
+const FORMAT_CONFIG = {
+  reels:{
+    label:'Reels 9:16', aspect:'9/16', previewWidth:'360px', defaultRes:'1080x1920',
+    resolutions:[['1080x1920','1080×1920 — önerilen Reels standardı'], ['720x1280','720×1280 — daha hızlı, daha küçük dosya']],
+    hint:'Reels formatında sağ ikon kolonu ve alt Instagram arayüz güvenli alanı dikkate alınır.',
+    caption:'Çerçeve, gerçek Reels oynatıcısının üst profil alanını, alt başlık/buton şeridini ve sağdaki beğeni-yorum ikon kolonunu temsil eder. Metinleri bu kılavuzların dışında tutarsan Instagram arayüzü hiçbir şeyi kapatmaz.',
+    filenamePrefix:'qualifyhaber-reels'
+  },
+  post:{
+    label:'Post 4:5', aspect:'4/5', previewWidth:'430px', defaultRes:'1080x1350',
+    resolutions:[['1080x1350','1080×1350 — önerilen Instagram 4:5 post'], ['800x1000','800×1000 — daha hızlı, daha küçük dosya']],
+    hint:'Post formatında üst/alt boşluk ve yan kenar payları dikkate alınır; sağ Reels ikon kolonu kullanılmaz.',
+    caption:'Çerçeve, Instagram 4:5 post görünümünü temsil eder. Başlık ve marka öğeleri üst/alt kenar boşluklarının dışında kalacak şekilde güvenli alanda konumlanır.',
+    filenamePrefix:'qualifyhaber-post'
+  }
+};
+
 const videoInput = $('videoInput');
 const frameVideo = $('frameVideo');
 const frameImage = $('frameImage');
@@ -499,12 +524,74 @@ const emptyFrame = $('emptyFrame');
 const clearVideoWrap = $('clearVideoWrap');
 const clearPhotoWrap = $('clearPhotoWrap');
 
+function setCanvasSizeFromExportRes(){
+  const [w,h] = state.exportRes.split('x').map(Number);
+  exportCanvas.width = w;
+  exportCanvas.height = h;
+  CW = w;
+  CH = h;
+}
+
+function refreshExportResOptions(){
+  const config = FORMAT_CONFIG[state.format];
+  const select = $('exportRes');
+  select.innerHTML = '';
+  config.resolutions.forEach(([value,label])=>{
+    const opt = document.createElement('option');
+    opt.value = value;
+    opt.textContent = label;
+    select.appendChild(opt);
+  });
+  state.exportRes = config.defaultRes;
+  select.value = state.exportRes;
+  setCanvasSizeFromExportRes();
+}
+
+function updateFormatUI(){
+  const isReels = state.format === 'reels';
+  const config = FORMAT_CONFIG[state.format];
+  $('formatReelsBtn').classList.toggle('active', isReels);
+  $('formatPostBtn').classList.toggle('active', !isReels);
+  $('formatHint').textContent = config.hint;
+  $('stageCaption').textContent = config.caption;
+  $('topbarFormatTag').innerHTML = (isReels ? '9:16' : '4:5') + ' · <b>Instagram Safe Zone</b> uyumlu';
+  document.documentElement.style.setProperty('--frame-aspect', config.aspect);
+  document.documentElement.style.setProperty('--frame-w', config.previewWidth);
+  SAFE = SAFE_PROFILES[state.format];
+  $('frameBrand').style.right = isReels ? '18%' : '6%';
+  $('frameTextblock').style.right = isReels ? '18%' : '6%';
+  document.querySelector('.sz-band.top').style.height = (SAFE.top*100)+'%';
+  document.querySelector('.sz-band.bottom').style.height = (SAFE.bottom*100)+'%';
+  const sideZone = document.querySelector('.sz-side');
+  sideZone.style.display = isReels ? 'block' : 'none';
+  sideZone.style.top = (SAFE.top*100)+'%';
+  sideZone.style.bottom = (SAFE.bottom*100)+'%';
+  sideZone.style.width = (SAFE.rightIcons*100)+'%';
+  document.querySelector('.sz-band.top .sz-label').textContent = isReels ? 'üst güvenli alan' : 'üst kenar payı';
+  document.querySelector('.sz-band.bottom .sz-label').textContent = isReels ? 'alt güvenli alan · IG arayüzü' : 'alt kenar payı';
+  updatePreviewTitleSize();
+}
+
+function setFormat(format){
+  if(state.recording || state.format === format) return;
+  state.format = format;
+  refreshExportResOptions();
+  updateFormatUI();
+  render();
+}
+
+$('formatReelsBtn').addEventListener('click', ()=>setFormat('reels'));
+$('formatPostBtn').addEventListener('click', ()=>setFormat('post'));
+
 function exportReady(){
   return (state.sourceMode==='video' && state.hasVideo) || (state.sourceMode==='photo' && state.hasPhoto);
 }
 
 function updateExportButtonState(){
   $('exportVideoBtn').disabled = state.recording || !exportReady();
+  if(!state.recording){
+    $('exportVideoBtn').textContent = state.format==='reels' ? 'Reels videosu indir (MP4)' : 'Post videosu indir (MP4)';
+  }
 }
 
 function updateSourceUI(){
@@ -759,7 +846,7 @@ $('safezoneToggle').addEventListener('change', e=>{
   state.safezone = e.target.checked;
   $('safezone').classList.toggle('show', state.safezone);
 });
-$('exportRes').addEventListener('change', e=>{ state.exportRes = e.target.value; });
+$('exportRes').addEventListener('change', e=>{ state.exportRes = e.target.value; setCanvasSizeFromExportRes(); render(); });
 
 function splitBrand(){
   const text = state.brandText || '';
@@ -789,10 +876,14 @@ function render(){
 }
 
 /* ---------- canvas export ---------- */
-const SAFE = { top:0.115, bottom:0.17, side:0.06, rightIcons:0.13 };
+const SAFE_PROFILES = {
+  reels:{ top:0.115, bottom:0.17, side:0.06, rightIcons:0.13 },
+  post:{ top:0.06, bottom:0.08, side:0.06, rightIcons:0 }
+};
+let SAFE = SAFE_PROFILES.reels;
 const exportCanvas = $('exportCanvas');
 const ctx = exportCanvas.getContext('2d');
-const CW = exportCanvas.width, CH = exportCanvas.height;
+let CW = exportCanvas.width, CH = exportCanvas.height;
 
 function drawCover(mediaEl, mw, mh, extraScale){
   if(!mw||!mh) return;
@@ -1019,9 +1110,10 @@ async function convertToMp4(webmBlob, w, h, onStage, onProgress){
 
 $('exportPngBtn').addEventListener('click', async ()=>{
   await document.fonts.ready;
+  setCanvasSizeFromExportRes();
   drawFrame(0);
   exportCanvas.toBlob(blob=>{
-    downloadBlob(blob, 'qualifyhaber-kapak.png');
+    downloadBlob(blob, FORMAT_CONFIG[state.format].filenamePrefix+'-kapak.png');
   }, 'image/png');
 });
 
@@ -1034,7 +1126,7 @@ function setRecordingUI(on){
     $('exportVideoBtn').textContent = 'Kaydediliyor…';
   } else {
     $('recLabel').textContent = 'ÖNİZLEME';
-    $('exportVideoBtn').textContent = 'Reels videosu indir (MP4)';
+    $('exportVideoBtn').textContent = state.format==='reels' ? 'Reels videosu indir (MP4)' : 'Post videosu indir (MP4)';
   }
   updateExportButtonState();
   if(on){
@@ -1059,6 +1151,7 @@ function setStageProgress(pct){
 $('exportVideoBtn').addEventListener('click', async ()=>{
   if(state.recording || !exportReady()) return;
   await document.fonts.ready;
+  setCanvasSizeFromExportRes();
 
   const stream = exportCanvas.captureStream(30);
   if(state.sourceMode==='video'){
@@ -1089,7 +1182,7 @@ $('exportVideoBtn').addEventListener('click', async ()=>{
     const rawBlob = new Blob(chunks, {type: nativeMp4 ? 'video/mp4' : 'video/webm'});
 
     if(nativeMp4){
-      downloadBlob(rawBlob, 'qualifyhaber-reels.mp4');
+      downloadBlob(rawBlob, FORMAT_CONFIG[state.format].filenamePrefix+'.mp4');
       setRecordingUI(false);
       return;
     }
@@ -1097,11 +1190,11 @@ $('exportVideoBtn').addEventListener('click', async ()=>{
     try{
       const [w,h] = state.exportRes.split('x').map(Number);
       const mp4Blob = await convertToMp4(rawBlob, w, h, setStage, setStageProgress);
-      downloadBlob(mp4Blob, 'qualifyhaber-reels.mp4');
+      downloadBlob(mp4Blob, FORMAT_CONFIG[state.format].filenamePrefix+'.mp4');
     }catch(err){
       console.error(err);
       alert('MP4\u2019e dönüştürme başarısız oldu, WEBM olarak indirildi. Telefonda CapCut veya VLC ile mp4\u2019e çevirebilirsin.');
-      downloadBlob(rawBlob, 'qualifyhaber-reels.webm');
+      downloadBlob(rawBlob, FORMAT_CONFIG[state.format].filenamePrefix+'.webm');
     } finally {
       setRecordingUI(false);
     }
@@ -1159,6 +1252,8 @@ function updatePreviewTitleSize(){
 
 new ResizeObserver(()=>updatePreviewTitleSize()).observe(frameWrapEl);
 
+refreshExportResOptions();
+updateFormatUI();
 render();
 </script>
 </body>
