@@ -190,6 +190,14 @@
   .frame-media.kenburns-anim{animation:kbzoom 9s ease-in-out infinite alternate;}
   @keyframes kbzoom{from{transform:scale(1);}to{transform:scale(1.08);}}
   .frame-overlay{position:absolute;inset:0;mix-blend-mode:normal;pointer-events:none;z-index:3;}
+  .frame-overlay.text-only{inset:auto 0 0 0;height:46%;}
+  .slide-hint{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.8px;
+    color:#fff;text-transform:uppercase;text-shadow:0 2px 10px rgba(0,0,0,.7);
+    opacity:.95;
+  }
+  .slide-hint svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none;flex:none;}
 
   .frame-brand{
     position:absolute;left:6%;right:18%;display:flex;align-items:center;gap:8px;z-index:4;
@@ -202,7 +210,11 @@
   .frame-brand .wordmark .w1{color:#fff;}
   .frame-brand .wordmark .w2{color:var(--accent);}
 
-  .frame-textblock{position:absolute;left:6%;right:18%;display:flex;flex-direction:column;gap:10px;z-index:4;}
+  /* frame-lower-group anchors the title block + slide-hint together from the bottom
+     safe-zone edge, stacked with a flex gap, so the slide-hint can never sit on top
+     of (or under) the headline regardless of how many lines the title wraps to. */
+  .frame-lower-group{position:absolute;left:6%;right:18%;display:flex;flex-direction:column;gap:16px;z-index:4;}
+  .frame-textblock{display:flex;flex-direction:column;gap:10px;}
   .frame-tag{
     align-self:flex-start;font-family:var(--mono);font-size:10.5px;font-weight:700;
     letter-spacing:1.4px;text-transform:uppercase;color:#0A0C0F;background:var(--accent-2);
@@ -241,13 +253,32 @@
   .stage-caption{
     font-family:var(--mono);font-size:11px;color:var(--muted-2);text-align:center;max-width:340px;line-height:1.6;
   }
+
+
+/* ---------- Dashboard UI v3 ---------- */
+:root{--accent:#ff3b30;--accent-2:#ffad00;--bg:#080b0f;--panel:#10151b;--panel-2:#151a22;--field:#111820;--border:#2a303a;--border-soft:#202731;--text:#f6f7fb;--muted:#a4aab4;--muted-2:#68707b;}
+body{background:radial-gradient(circle at 58% 0%, rgba(255,176,32,.08), transparent 34%), radial-gradient(circle at 0% 0%, rgba(255,59,48,.10), transparent 28%), #080b0f;}
+.topbar{height:82px;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,.07);background:linear-gradient(180deg,rgba(16,20,27,.92),rgba(8,11,15,.94));box-shadow:0 10px 34px rgba(0,0,0,.22);}
+.brand-mark{width:50px;height:50px;border-radius:8px;background:linear-gradient(135deg,#ff5148,#c90f0f);font-family:var(--display);font-size:19px;box-shadow:0 10px 20px rgba(255,59,48,.22);}
+.brand-text h1{font-size:22px;font-weight:800;letter-spacing:-.4px;line-height:1}.brand-text h1::first-letter{color:#fff}.brand-text h1{color:#fff}.brand-text h1::after{content:''}.brand-text h1{ text-shadow:0 1px 0 rgba(255,255,255,.04)}.brand-text h1{ }
+.brand-text p{font-size:11px;margin-top:7px;color:#8b929d;letter-spacing:1.2px}.topbar-tag{background:#11161d;border-color:#29313a;border-radius:7px;padding:12px 15px;font-family:var(--body);font-size:13px}.topbar-tag b{color:#ffad00}
+.workspace{grid-template-columns:456px minmax(620px,1fr);gap:16px;padding:0 16px 16px;min-height:calc(100vh - 82px)}
+.controls{margin-top:0;border:1px solid rgba(255,255,255,.08);border-radius:7px;background:linear-gradient(180deg,rgba(20,25,33,.96),rgba(13,18,24,.98));padding:16px;max-height:calc(100vh - 98px);box-shadow:0 24px 60px rgba(0,0,0,.28);}
+.section{margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.08)}.section:last-child{border-bottom:none;margin-bottom:0}.section-head{margin-bottom:12px}.section-num{width:22px;height:22px;border-radius:50%;background:#ffad00;color:#111;font-size:12px;box-shadow:0 0 0 2px rgba(255,176,32,.18)}.section-head h2{font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+.hint,.export-note{border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.03);border-radius:7px;padding:10px 12px;color:#a4aab4}.field label{font-family:var(--body);text-transform:none;font-size:12px;letter-spacing:0;color:#b1b7c1}.field input[type=text],.field textarea,select,#photoUrlInput{background:linear-gradient(180deg,#151b24,#111720)!important;border-color:#2b333d!important;border-radius:7px!important;color:#f5f6f8!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.035)}.field textarea{min-height:68px}.toggle-row{background:#11161d;border:1px solid #29313a;border-radius:7px;padding:0;overflow:hidden;gap:0}.toggle-row button{border:none;border-right:1px solid #29313a;border-radius:0;background:transparent;color:#c3c7ce;padding:11px 12px}.toggle-row button:last-child{border-right:none}.toggle-row button.active{background:linear-gradient(180deg,rgba(255,176,32,.12),rgba(255,176,32,.04));color:#ffad00;box-shadow:inset 0 -2px 0 #ffad00;border-color:transparent}.filebtn{min-height:62px;border-style:dashed;border-color:#38414c;background:rgba(255,255,255,.025);justify-content:flex-start}.filebtn:before{content:'☁';width:38px;height:38px;border:1px solid #404a56;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;color:#d8dce2;margin-right:8px}.fname{margin-left:auto;color:#2bd17e!important}.swatches{grid-template-columns:repeat(5,1fr);gap:7px}.swatch{height:34px;aspect-ratio:auto;border-radius:7px;border:1px solid #313945}.swatch.active{border-color:#ffad00;box-shadow:0 0 0 1px #ffad00}.colorpick{background:#111820;border-color:#2b333d}.slider-row .slabel{font-family:var(--body);font-size:12px;text-transform:none;letter-spacing:0}.checkrow span{color:#d8dce2}.export-btn{height:58px;border-radius:7px;text-transform:uppercase;letter-spacing:.3px}.export-btn.primary{background:linear-gradient(180deg,#182027,#11171f);border:1px solid #ff3b30;color:#fff}.export-btn.secondary{background:#10161e;border:1px solid #ffad00;color:#fff}.export-btn.primary:before{content:'▣';font-size:22px}.export-btn.secondary:before{content:'▧';font-size:22px}
+.preview-stage{position:relative;display:grid;grid-template-columns:minmax(420px,520px) 1fr;align-content:start;gap:22px;margin-top:0;border:1px solid rgba(255,255,255,.08);border-radius:7px;background:linear-gradient(180deg,rgba(16,21,28,.96),rgba(9,13,18,.98));padding:62px 36px 18px;box-shadow:0 24px 70px rgba(0,0,0,.3)}
+.preview-stage:before{content:'ÖNİZLEME';position:absolute;left:0;top:0;height:42px;width:86px;display:flex;align-items:center;padding-left:12px;font-size:13px;color:#bfc4ca;border-right:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02)}
+.preview-tabs{position:absolute;left:86px;top:0;height:42px;display:flex}.preview-tab{display:flex;align-items:center;padding:0 24px;border-right:1px solid rgba(255,255,255,.08);font-size:13px;font-weight:700;color:#bfc4ca;background:rgba(255,255,255,.02);cursor:pointer}.preview-tab.active{color:#ffad00;box-shadow:inset 0 -2px 0 #ffad00;background:rgba(255,176,32,.07)}
+.safezone-switch{position:absolute;right:16px;top:0;height:42px;display:flex;align-items:center;gap:12px;color:#fff;font-size:14px}.safezone-pill{width:40px;height:21px;background:#ff741f;border-radius:999px;position:relative;transition:background .15s;cursor:pointer}.safezone-pill:after{content:'';position:absolute;right:3px;top:3px;width:15px;height:15px;border-radius:50%;background:#fff;transition:right .15s}.safezone-pill.off{background:#3a4048}.safezone-pill.off:after{right:19px}.stage-readout{grid-column:2;grid-row:1;font-family:var(--body);font-size:14px;color:#c7ccd4;align-self:start;margin-top:8px}.stage-readout:after{content:'1080×1920px';display:block;color:#7f8792;margin-top:4px;font-size:13px}.frame-wrap{grid-column:1;grid-row:1 / span 2;width:min(var(--frame-w, 430px), 100%);border-radius:7px;box-shadow:0 0 0 1px #4d5662,0 22px 60px rgba(0,0,0,.42);justify-self:center}.frame-wrap:before{content:'Safe Zone';position:absolute;top:12px;left:0;right:0;text-align:center;font-size:11px;color:rgba(255,255,255,.78);z-index:8}.corner{width:24px;height:24px}.corner.tl{top:14px;left:14px}.corner.tr{top:14px;right:14px}.corner.bl{bottom:14px;left:14px}.corner.br{bottom:14px;right:14px}.safezone.show{opacity:.85}.sz-band.top,.sz-band.bottom{border-color:rgba(255,255,255,.62)!important}.sz-side{border-color:rgba(255,255,255,.45)!important}.sz-label{display:none}.frame-brand{top:8%!important}.slide-hint{font-size:11px!important}.stage-caption{grid-column:1 / -1;max-width:none;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.035);border-radius:7px;padding:14px 16px;color:#aeb4be;text-align:left}.stage-caption:before{content:'ⓘ';font-size:18px;margin-right:12px;color:#cfd4db}.preview-info{grid-column:2;grid-row:1 / span 2;align-self:center;margin-top:90px;color:#aab1bb;font-size:13px;line-height:1.55}.preview-info .legend{display:grid;grid-template-columns:42px 1fr;gap:8px;margin:18px 0}.preview-info .dash{border-top:2px dashed #fff;margin-top:10px}.preview-info .dash.yellow{border-color:#ffad00}.preview-info b{color:#ffad00}.preview-info h3{margin:0 0 3px;color:#d9dde3;font-size:15px}.preview-info small{color:#8b929d}.footer-note{position:fixed;left:20px;bottom:6px;color:#6e7681;font-size:11px}
+@media(max-width:1100px){.workspace{grid-template-columns:1fr}.controls{max-height:none}.preview-stage{grid-template-columns:1fr}.stage-readout,.preview-info{grid-column:1;grid-row:auto}.preview-info{margin-top:0}.frame-wrap{grid-row:auto}}
+
 </style>
 </head>
 <body>
 
 <div class="topbar">
   <div class="brand">
-    <div class="brand-mark">Q</div>
+    <div class="brand-mark">QH</div>
     <div class="brand-text">
       <h1>QualifyHaber</h1>
       <p>Sosyal İçerik Stüdyosu</p>
@@ -261,7 +292,7 @@
   <aside class="controls">
 
     <div class="section">
-      <div class="section-head"><div class="section-num">F</div><h2>Format</h2></div>
+      <div class="section-head"><div class="section-num">1</div><h2>Boyut Seçimi</h2></div>
       <div class="toggle-row">
         <button class="active" id="formatReelsBtn">Reels 9:16</button>
         <button id="formatPostBtn">Post 4:5</button>
@@ -270,7 +301,7 @@
     </div>
 
     <div class="section">
-      <div class="section-head"><div class="section-num">1</div><h2>Kaynak</h2></div>
+      <div class="section-head"><div class="section-num">2</div><h2>Medya Yükleme</h2></div>
 
       <div class="toggle-row">
         <button class="active" id="sourceModeVideo">Video</button>
@@ -324,7 +355,7 @@
     </div>
 
     <div class="section">
-      <div class="section-head"><div class="section-num">2</div><h2>Marka</h2></div>
+      <div class="section-head"><div class="section-num">5</div><h2>Yazı ve Marka Ayarları</h2></div>
 
       <label class="checkrow">
         <input type="checkbox" id="brandVisibleToggle" checked>
@@ -360,7 +391,7 @@
     </div>
 
     <div class="section">
-      <div class="section-head"><div class="section-num">3</div><h2>İçerik</h2></div>
+      <div class="section-head"><div class="section-num">3</div><h2>İçerik Bilgileri</h2></div>
       <div class="field">
         <label>Konu / kategori etiketi</label>
         <input type="text" id="tagInput" maxlength="22" value="GÜNDEM">
@@ -370,10 +401,18 @@
         <textarea id="titleInput" maxlength="110">Başlığı buraya yaz, otomatik satır kırılır</textarea>
         <p class="hint" id="titleCount">0/110</p>
       </div>
+      <div class="row2">
+        <div class="colorpick"><input type="color" id="titleColor" value="#FFFFFF"><span>Başlık rengi</span></div>
+      </div>
+      <div class="slider-row" style="margin-top:12px;">
+        <div class="slabel"><span>Yazı boyutu (maks.)</span><b id="titleMaxFontOut">66px</b></div>
+        <input type="range" id="titleMaxFont" min="32" max="90" value="66">
+        <p class="hint">Başlık uzadıkça yazı otomatik olarak küçülür; bu değer en uzun (tek satırlık) başlık için üst sınırı belirler.</p>
+      </div>
     </div>
 
     <div class="section">
-      <div class="section-head"><div class="section-num">4</div><h2>Gradyan</h2></div>
+      <div class="section-head"><div class="section-num">4</div><h2>Gradient Ayarları</h2></div>
       <div class="swatches" id="presetSwatches"></div>
       <div class="row2" style="margin-top:22px;">
         <div class="colorpick"><input type="color" id="color1" value="#FF2D2D"><span>Renk 1</span></div>
@@ -393,6 +432,14 @@
         <div class="slabel"><span>Gradyan yoğunluğu</span><b id="opacityOut">%55</b></div>
         <input type="range" id="opacity" min="0" max="100" value="55">
       </div>
+      <div class="field">
+        <label>Gradyan alanı</label>
+        <select id="gradientArea">
+          <option value="text" selected>Sadece yazı alanı</option>
+          <option value="full">Tüm ekran</option>
+        </select>
+        <p class="hint">Sadece yazı alanı seçili olduğunda geçiş şeffaftan renge yumuşak akar; görselin tamamı kararmadan başlık okunaklı kalır.</p>
+      </div>
     </div>
 
     <div class="section">
@@ -404,7 +451,23 @@
     </div>
 
     <div class="section">
-      <div class="section-head"><div class="section-num">6</div><h2>Dışa aktar</h2></div>
+      <div class="section-head"><div class="section-num">6</div><h2>Slider (Post için)</h2></div>
+      <label class="checkrow">
+        <input type="checkbox" id="slideHintToggle">
+        <span>“Yana Kaydır” ibaresini göster</span>
+      </label>
+      <div class="field">
+        <label>Slider metni</label>
+        <input type="text" id="slideHintText" maxlength="24" value="Yana Kaydır">
+        <p class="hint">Post slider/carousel içeriklerinde alta küçük bir yönlendirme ikonu ekler.</p>
+      </div>
+      <div class="row2">
+        <div class="colorpick"><input type="color" id="slideHintColor" value="#FFFFFF"><span>Metin / ikon rengi</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><div class="section-num">7</div><h2>Dışa Aktar</h2></div>
       <div class="field">
         <label>Çözünürlük</label>
         <select id="exportRes"></select>
@@ -439,9 +502,16 @@
         <img id="brandLogoImg" style="display:none;">
       </div>
 
-      <div class="frame-textblock" id="frameTextblock" style="bottom:18%;">
-        <div class="frame-tag" id="frameTag">GÜNDEM</div>
-        <div class="frame-title" id="frameTitle">Başlığı buraya yaz, otomatik satır kırılır</div>
+      <div class="frame-lower-group" id="frameLowerGroup" style="bottom:18%;">
+        <div class="frame-textblock" id="frameTextblock">
+          <div class="frame-tag" id="frameTag">GÜNDEM</div>
+          <div class="frame-title" id="frameTitle">Başlığı buraya yaz, otomatik satır kırılır</div>
+        </div>
+
+        <div class="slide-hint" id="slideHint" style="display:none;">
+          <span id="slideHintPreviewText">Yana Kaydır</span>
+          <svg viewBox="0 0 24 24"><path d="M5 12h13"/><path d="M13 6l6 6-6 6"/></svg>
+        </div>
       </div>
 
       <div class="safezone show" id="safezone">
@@ -490,9 +560,14 @@ const state = {
   logoImg:null,
   tag:'GÜNDEM',
   title:'Başlığı buraya yaz, otomatik satır kırılır',
+  titleColor:'#FFFFFF',
+  titleMaxFont:66,
   c1:'#FF2D2D', c2:'#1A0000',
-  gradStyle:'linear', angle:160, opacity:55,
+  gradStyle:'linear', angle:160, opacity:55, gradientArea:'text',
   safezone:true,
+  slideHintVisible:false,
+  slideHintText:'Yana Kaydır',
+  slideHintColor:'#FFFFFF',
   recording:false,
   exportRes:'1080x1920'
 };
@@ -559,7 +634,7 @@ function updateFormatUI(){
   document.documentElement.style.setProperty('--frame-w', config.previewWidth);
   SAFE = SAFE_PROFILES[state.format];
   $('frameBrand').style.right = isReels ? '18%' : '6%';
-  $('frameTextblock').style.right = isReels ? '18%' : '6%';
+  $('frameLowerGroup').style.right = isReels ? '18%' : '6%';
   document.querySelector('.sz-band.top').style.height = (SAFE.top*100)+'%';
   document.querySelector('.sz-band.bottom').style.height = (SAFE.bottom*100)+'%';
   const sideZone = document.querySelector('.sz-side');
@@ -569,6 +644,7 @@ function updateFormatUI(){
   sideZone.style.width = (SAFE.rightIcons*100)+'%';
   document.querySelector('.sz-band.top .sz-label').textContent = isReels ? 'üst güvenli alan' : 'üst kenar payı';
   document.querySelector('.sz-band.bottom .sz-label').textContent = isReels ? 'alt güvenli alan · IG arayüzü' : 'alt kenar payı';
+  updateSlideHintSafePosition();
   updatePreviewTitleSize();
 }
 
@@ -842,9 +918,36 @@ $('opacity').addEventListener('input', e=>{
   state.opacity = +e.target.value; $('opacityOut').textContent = '%'+state.opacity;
   render();
 });
+$('gradientArea').addEventListener('change', e=>{
+  state.gradientArea = e.target.value;
+  render();
+});
+$('slideHintToggle').addEventListener('change', e=>{
+  state.slideHintVisible = e.target.checked;
+  render();
+});
+$('slideHintText').addEventListener('input', e=>{
+  state.slideHintText = e.target.value || 'Yana Kaydır';
+  render();
+});
+$('slideHintColor').addEventListener('input', e=>{
+  state.slideHintColor = e.target.value;
+  render();
+});
+$('titleColor').addEventListener('input', e=>{
+  state.titleColor = e.target.value;
+  render();
+});
+$('titleMaxFont').addEventListener('input', e=>{
+  state.titleMaxFont = +e.target.value;
+  $('titleMaxFontOut').textContent = state.titleMaxFont+'px';
+  render();
+});
 $('safezoneToggle').addEventListener('change', e=>{
   state.safezone = e.target.checked;
   $('safezone').classList.toggle('show', state.safezone);
+  const pill = document.querySelector('.safezone-pill');
+  if(pill) pill.classList.toggle('off', !state.safezone);
 });
 $('exportRes').addEventListener('change', e=>{ state.exportRes = e.target.value; setCanvasSizeFromExportRes(); render(); });
 
@@ -865,12 +968,38 @@ function updateWordmark(){
   $('wmPost').textContent = parts.post;
 }
 
+function getSoftTextGradientCss(){
+  const baseA = state.opacity/100;
+  const strongA = Math.min(1, baseA + 0.18);
+  const midA = Math.max(0, baseA * 0.55);
+  if(state.gradStyle === 'radial'){
+    return 'radial-gradient(ellipse at 50% 100%, '+hexToRgba(state.c1,strongA)+' 0%, '+hexToRgba(state.c2,midA)+' 48%, rgba(0,0,0,0) 78%)';
+  }
+  return 'linear-gradient(0deg, '+hexToRgba(state.c2,strongA)+' 0%, '+hexToRgba(state.c1,baseA)+' 45%, '+hexToRgba(state.c1,midA)+' 68%, rgba(0,0,0,0) 100%)';
+}
+
+function updateSlideHintSafePosition(){
+  const safeBottom = (SAFE && SAFE.bottom ? SAFE.bottom : 0.17);
+  $('frameLowerGroup').style.bottom = (safeBottom * 100) + '%';
+}
+
 function render(){
-  $('frameOverlay').style.background = state.gradStyle==='radial'
-    ? 'radial-gradient(circle at 50% 50%, '+hexToRgba(state.c1,state.opacity/100)+', '+hexToRgba(state.c2,Math.min(1,state.opacity/100+0.25))+')'
-    : 'linear-gradient('+state.angle+'deg, '+hexToRgba(state.c1,state.opacity/100)+', '+hexToRgba(state.c2,Math.min(1,state.opacity/100+0.25))+')';
+  const overlay = $('frameOverlay');
+  overlay.classList.toggle('text-only', state.gradientArea === 'text');
+  if(state.gradientArea === 'text'){
+    overlay.style.background = getSoftTextGradientCss();
+  } else {
+    overlay.style.background = state.gradStyle==='radial'
+      ? 'radial-gradient(circle at 50% 50%, '+hexToRgba(state.c1,state.opacity/100)+', '+hexToRgba(state.c2,Math.min(1,state.opacity/100+0.25))+')'
+      : 'linear-gradient('+state.angle+'deg, '+hexToRgba(state.c1,state.opacity/100)+', '+hexToRgba(state.c2,Math.min(1,state.opacity/100+0.25))+')';
+  }
   $('frameTag').textContent = state.tag;
   $('frameTitle').textContent = state.title || 'Başlığı buraya yaz';
+  $('frameTitle').style.color = state.titleColor || '#FFFFFF';
+  updateSlideHintSafePosition();
+  $('slideHint').style.display = state.slideHintVisible ? 'flex' : 'none';
+  $('slideHint').style.color = state.slideHintColor || '#FFFFFF';
+  $('slideHintPreviewText').textContent = state.slideHintText || 'Yana Kaydır';
   updateWordmark();
   updatePreviewTitleSize();
 }
@@ -902,8 +1031,36 @@ function angleCoords(angleDeg, w, h){
 }
 
 function drawGradient(){
+  const baseA = state.opacity/100;
+  const strongA = Math.min(1, baseA + 0.18);
+  const midA = Math.max(0, baseA * 0.55);
+
+  if(state.gradientArea === 'text'){
+    const gx = 0;
+    const gy = CH*0.44;
+    const gw = CW;
+    const gh = CH*0.56;
+    let grad;
+    if(state.gradStyle==='radial'){
+      grad = ctx.createRadialGradient(CW/2, gy+gh*0.92, 0, CW/2, gy+gh*0.92, Math.max(gw,gh)*0.72);
+      grad.addColorStop(0, hexToRgba(state.c1, strongA));
+      grad.addColorStop(0.48, hexToRgba(state.c2, midA));
+      grad.addColorStop(0.78, 'rgba(0,0,0,0)');
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+    } else {
+      grad = ctx.createLinearGradient(0, gy+gh, 0, gy);
+      grad.addColorStop(0, hexToRgba(state.c2, strongA));
+      grad.addColorStop(0.45, hexToRgba(state.c1, baseA));
+      grad.addColorStop(0.68, hexToRgba(state.c1, midA));
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+    }
+    ctx.fillStyle = grad;
+    ctx.fillRect(gx,gy,gw,gh);
+    return;
+  }
+
   let grad;
-  const a1 = state.opacity/100, a2 = Math.min(1, state.opacity/100+0.25);
+  const a1 = baseA, a2 = Math.min(1, baseA+0.25);
   if(state.gradStyle==='radial'){
     grad = ctx.createRadialGradient(CW/2,CH/2,0,CW/2,CH/2,Math.max(CW,CH)*0.75);
   } else {
@@ -989,18 +1146,22 @@ function fitTitleLines(text, maxWidth, maxHeight, maxFont, minFont, lineHeightRa
   return {fontSize, lines, lineHeight};
 }
 
+function getHintReserveH(){
+  return state.slideHintVisible ? CH*0.065 : 0;
+}
+
 function drawTextBlock(){
   const rightLimit = CW - CW*(SAFE.side + SAFE.rightIcons);
   const leftX = CW*SAFE.side;
   const maxWidth = rightLimit - leftX;
-  const bottomLimit = CH - CH*SAFE.bottom;
+  const bottomLimit = (CH - CH*SAFE.bottom) - getHintReserveH();
   const topLimit = CH * 0.30;
 
   ctx.textBaseline = 'alphabetic';
   const tagH = 58;
   const gap = 22;
   const availableForLines = (bottomLimit - topLimit) - tagH - gap;
-  const {fontSize, lines, lineHeight} = fitTitleLines(state.title, maxWidth, availableForLines, 66, 32, 1.15);
+  const {fontSize, lines, lineHeight} = fitTitleLines(state.title, maxWidth, availableForLines, state.titleMaxFont||66, 32, 1.15);
   const titleFont = "900 "+fontSize+"px 'Archivo Black', sans-serif";
 
   const totalH = tagH + gap + lines.length*lineHeight;
@@ -1019,7 +1180,7 @@ function drawTextBlock(){
 
   let ty = cursorY + tagH + gap + lineHeight*0.78;
   ctx.font = titleFont;
-  ctx.fillStyle = '#FFFFFF';
+  ctx.fillStyle = state.titleColor || '#FFFFFF';
   ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 22; ctx.shadowOffsetY = 4;
   ctx.textBaseline = 'alphabetic';
   for(const line of lines){
@@ -1037,6 +1198,29 @@ function roundRect(x,y,w,h,r){
   ctx.arcTo(x,y+h,x,y,r);
   ctx.arcTo(x,y,x+w,y,r);
   ctx.closePath();
+}
+
+function drawSlideHint(){
+  if(!state.slideHintVisible) return;
+  const text = state.slideHintText || 'Yana Kaydır';
+  ctx.save();
+  const hintColor = state.slideHintColor || '#FFFFFF';
+  ctx.font = "700 28px 'Space Mono', monospace";
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = hintColor;
+  ctx.shadowColor = 'rgba(0,0,0,.7)'; ctx.shadowBlur = 18; ctx.shadowOffsetY = 3;
+  const y = (CH - CH*SAFE.bottom) - getHintReserveH()/2;
+  const textW = ctx.measureText(text).width;
+  const groupW = textW + 44;
+  const startX = (CW-groupW)/2;
+  ctx.fillText(text, startX + textW/2, y);
+  ctx.beginPath();
+  const ax = startX + textW + 22;
+  ctx.moveTo(ax-10, y); ctx.lineTo(ax+10, y);
+  ctx.moveTo(ax+3, y-8); ctx.lineTo(ax+11, y); ctx.lineTo(ax+3, y+8);
+  ctx.strokeStyle = hintColor; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.stroke();
+  ctx.restore();
 }
 
 function drawFrame(elapsedMs){
@@ -1057,6 +1241,7 @@ function drawFrame(elapsedMs){
   drawGradient();
   drawBrand();
   drawTextBlock();
+  drawSlideHint();
 }
 
 function fmtTime(s){
@@ -1240,17 +1425,57 @@ function updatePreviewTitleSize(){
   const rightLimit = CW - CW*(SAFE.side + SAFE.rightIcons);
   const leftX = CW*SAFE.side;
   const maxWidth = rightLimit - leftX;
-  const bottomLimit = CH - CH*SAFE.bottom;
+  const bottomLimit = (CH - CH*SAFE.bottom) - getHintReserveH();
   const topLimit = CH * 0.30;
   const tagH = 58, gap = 22;
   const availableForLines = (bottomLimit - topLimit) - tagH - gap;
 
-  const {fontSize, lineHeight} = fitTitleLines(state.title, maxWidth, availableForLines, 66, 32, 1.15);
+  const {fontSize, lineHeight} = fitTitleLines(state.title, maxWidth, availableForLines, state.titleMaxFont||66, 32, 1.15);
   frameTitleEl.style.fontSize = Math.round(fontSize*scale)+'px';
   frameTitleEl.style.lineHeight = Math.round(lineHeight*scale)+'px';
 }
 
+/* Canvas measureText silently falls back to a generic font while the Archivo Black
+   webfont is still downloading, which under-estimates glyph widths and can make the
+   auto-fit think a long title fits when it doesn't. Re-run the fit once the real
+   font is confirmed loaded so sizing/wrapping is always accurate. */
+document.fonts.ready.then(()=>{ updatePreviewTitleSize(); });
+
 new ResizeObserver(()=>updatePreviewTitleSize()).observe(frameWrapEl);
+
+
+
+/* ---------- Dashboard chrome additions ---------- */
+(function(){
+  const stage=document.querySelector('.preview-stage');
+  if(stage && !document.querySelector('.preview-tabs')){
+    const tabs=document.createElement('div');
+    tabs.className='preview-tabs';
+    tabs.innerHTML='<button type="button" class="preview-tab active" data-format="reels">REELS (9:16)</button><button type="button" class="preview-tab" data-format="post">POST (4:5)</button>';
+    stage.prepend(tabs);
+    tabs.addEventListener('click',e=>{const b=e.target.closest('.preview-tab'); if(!b) return; setFormat(b.dataset.format); document.querySelectorAll('.preview-tab').forEach(x=>x.classList.toggle('active',x===b));});
+    const sw=document.createElement('div');
+    sw.className='safezone-switch';
+    sw.innerHTML='<span>Safe Zone Göster</span><span class="safezone-pill"></span>';
+    stage.prepend(sw);
+    sw.addEventListener('click',()=>{$('safezoneToggle').click();});
+    const info=document.createElement('aside');
+    info.className='preview-info';
+    info.innerHTML='<h3 id="previewInfoTitle">Reels (9:16) Önizleme</h3><small id="previewInfoSize">1080x1920px</small><div class="legend"><span class="dash"></span><span>Dış Kenar</span><span class="dash yellow"></span><span><b>Safe Zone</b><br><small id="previewSafeSize">980x1740</small></span></div><p>Tüm önemli içerikleri safe zone içinde tutmaya özen gösterin.</p>';
+    stage.appendChild(info);
+    const footer=document.createElement('div'); footer.className='footer-note'; footer.textContent='© 2026 QualifyHaber — Sosyal İçerik Stüdyosu'; document.body.appendChild(footer);
+  }
+})();
+const _oldUpdateFormatUI = updateFormatUI;
+updateFormatUI = function(){
+  _oldUpdateFormatUI();
+  document.querySelectorAll('.preview-tab').forEach(b=>b.classList.toggle('active',b.dataset.format===state.format));
+  const isReels=state.format==='reels';
+  const title=document.getElementById('previewInfoTitle'); if(title) title.textContent=(isReels?'Reels (9:16)':'Post (4:5)')+' Önizleme';
+  const size=document.getElementById('previewInfoSize'); if(size) size.textContent=isReels?'1080x1920px':'1080x1350px';
+  const safe=document.getElementById('previewSafeSize'); if(safe) safe.textContent=isReels?'980x1740':'940x1210';
+  const sr=document.querySelector('.stage-readout'); if(sr) sr.style.display='block';
+};
 
 refreshExportResOptions();
 updateFormatUI();
