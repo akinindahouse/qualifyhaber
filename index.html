@@ -288,6 +288,8 @@ body{background:radial-gradient(circle at 58% 0%, rgba(255,176,32,.08), transpar
 .flag-result-item .flag-thumb{width:24px;height:24px;object-fit:cover;border-radius:50%;flex:none;}
 .flag-selected{display:flex;align-items:center;gap:10px;margin-top:10px;padding:10px 12px;border:1px solid #2b333d;border-radius:7px;background:#111720;color:#d8dce2;font-size:13px}
 .flag-selected .flag-thumb-lg{width:32px;height:32px;object-fit:cover;border-radius:50%;flex:none;}
+.chip-remove-btn{margin-left:auto;background:transparent;border:1px solid #3a4048;color:#ff8a8a;border-radius:6px;padding:6px 10px;font-size:12px;cursor:pointer;white-space:nowrap;}
+.chip-remove-btn:hover{background:rgba(255,107,107,.1);border-color:#ff6b6b;}
 .flag-empty{padding:10px 12px;color:#7f8792;font-size:12px}
 .filebtn.dragover{border-color:#ffad00;background:rgba(255,173,0,.08);}
 .preview-stage{position:relative;display:grid;grid-template-columns:minmax(420px,520px) 1fr;align-content:start;gap:22px;margin-top:0;border:1px solid rgba(255,255,255,.08);border-radius:7px;background:linear-gradient(180deg,rgba(16,21,28,.96),rgba(9,13,18,.98));padding:62px 36px 18px;box-shadow:0 24px 70px rgba(0,0,0,.3)}
@@ -504,6 +506,7 @@ body{background:radial-gradient(circle at 58% 0%, rgba(255,176,32,.08), transpar
         <div id="flagSelected" class="flag-selected" style="display:none;">
           <img id="flagSelectedImg" class="flag-thumb-lg">
           <span id="flagSelectedName"></span>
+          <button type="button" class="chip-remove-btn" id="flagRemoveBtn" title="Bayrağı kaldır">Bayrağı kaldır</button>
         </div>
       </div>
     </div>
@@ -521,10 +524,11 @@ body{background:radial-gradient(circle at 58% 0%, rgba(255,176,32,.08), transpar
           <input type="file" id="extraImgInput" accept="image/*">
         </label>
         <div class="field" style="margin-top:10px;">
-          <label>veya görsel linki yapıştır</label>
-          <input type="text" id="extraImgUrlInput" placeholder="https://...">
+          <label>veya görsel linki yapıştır (Ctrl+V ile de resim yapıştırabilirsin)</label>
+          <input type="text" id="extraImgUrlInput" placeholder="https://... ya da buraya tıklayıp Ctrl+V yapıştır">
           <p class="hint" id="extraImgUrlError" style="display:none;color:#ff6b6b;">Bu bağlantı yüklenemedi (geçersiz link ya da site dışarıdan gömmeye izin vermiyor). Görseli indirip yukarıdan yüklemeyi dene.</p>
         </div>
+        <button type="button" class="export-btn secondary" id="clearExtraImgBtn" style="margin:12px 0 0;display:none;">Küçük görseli kaldır</button>
         <div class="row2" style="margin-top:12px;">
           <div class="field">
             <label>Konum</label>
@@ -1173,6 +1177,16 @@ $('flagSearch').addEventListener('input', e=>{ renderFlagResults(e.target.value)
 document.addEventListener('click', e=>{
   if(!e.target.closest('#flagFieldWrap')) $('flagResults').style.display='none';
 });
+$('flagRemoveBtn').addEventListener('click', ()=>{
+  state.flagCode = '';
+  state.flagName = '';
+  state.flagImg = null;
+  state.flagVisible = false;
+  $('flagToggle').checked = false;
+  $('flagSelected').style.display = 'none';
+  $('flagSearch').value = '';
+  render();
+});
 
 /* ---------- Ek Görsel (extra small image) ---------- */
 function updateExtraImgPosition(){
@@ -1213,6 +1227,7 @@ function loadExtraImgFile(f){
   $('extraImgFileName').textContent = f.name.length>16 ? f.name.slice(0,14)+'…' : f.name;
   $('extraImgUrlInput').value = '';
   $('extraImgUrlError').style.display = 'none';
+  $('clearExtraImgBtn').style.display = 'block';
 }
 
 $('extraImgInput').addEventListener('change', e=>{
@@ -1240,12 +1255,39 @@ $('extraImgUrlInput').addEventListener('change', e=>{
   img.onload = ()=>{
     state.extraImg = img;
     $('extraImgFileName').textContent = 'Bağlantıdan yüklendi';
+    $('clearExtraImgBtn').style.display = 'block';
     render();
   };
   img.onerror = ()=>{
     $('extraImgUrlError').style.display = 'block';
   };
   img.src = url;
+});
+$('extraImgUrlInput').addEventListener('paste', e=>{
+  const items = (e.clipboardData && e.clipboardData.items) || [];
+  for(const item of items){
+    if(item.type && item.type.startsWith('image/')){
+      const file = item.getAsFile();
+      if(file){
+        e.preventDefault();
+        loadExtraImgFile(file);
+        return;
+      }
+    }
+  }
+  setTimeout(()=>{
+    const val = $('extraImgUrlInput').value.trim();
+    if(val) $('extraImgUrlInput').dispatchEvent(new Event('change'));
+  }, 30);
+});
+$('clearExtraImgBtn').addEventListener('click', ()=>{
+  state.extraImg = null;
+  $('extraImgFileName').textContent = '';
+  $('extraImgUrlInput').value = '';
+  $('extraImgUrlError').style.display = 'none';
+  $('clearExtraImgBtn').style.display = 'none';
+  $('extraImgInput').value = '';
+  render();
 });
 
 $('extraImgPos').addEventListener('change', e=>{
